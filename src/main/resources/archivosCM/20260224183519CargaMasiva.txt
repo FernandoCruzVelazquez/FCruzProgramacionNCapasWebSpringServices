@@ -1,0 +1,20 @@
+Maria|Lopez|Martinez|maria.l@email.com|1992-08-20|552343456789dfghnm56789|5523456789|mlopez|F|1322413223_Mar|LOMA920820MDFRRN02|2|Insurgentes|202|B-45|1144
+Carlos|Ruiz|Sanchez|c.ruiz@email.com|1988-03-12|5534567890|5534567890|cruiz|M|Carlos_789$|RUSC880312HDFRRN03|1|Juarez|SN|12|1145
+Ana|Torres|Gomez|ana.torres@email.com|1995-11-25|5545678901|5545678901|atorres|F|Ana2024*|TOGA951125MDFRRN04|3|Hidalgo|5|100|1146
+Luis|Hernandez|Diaz|l.hernan@email.com|1985-01-30|5556789012|5556789012|lhernan|M|Luis_999%|HEDL850130HDFRRN05|2|Constitucion|12B|45|1147
+Elena|Vazquez|Ramos|elena.v@email.com|1993-07-04|5567890123|5567890123|evazquez|F|Elena_123&|VARE930704MDFRRN06|1|Madero|1|22|1148
+Jorge|Castillo|Flores|j.castillo@email.com|1980-09-18|5578901234|5578901234|jcastillo|M|Jorge_888!|CAFJ800918HDFRRN07|2|Morelos|4|10|1149
+Sofia|Ramirez|Luna|s.ramirez@email.com|1998-04-10|5589012345|5589012345|sramirez|F|Sofia_123.|RALX980410MDFRRN08|3|5 de Mayo|10|200|1150
+Ricardo|Navarro|Cruz|r.navarro@email.com|1987-12-05|5590123456|5590123456|rnavarro|M|Ric_Nav123|NACR871205HDFRRN09|1|Zaragoza|2|33|1151
+Lucia|Mendez|Ortiz|l.mendez@email.com|1991-06-22|5501234567|5501234567|lmendez|F|Lucia_444-|MEOL910622MDFRRN10|2|Independencia|9|55|1152
+Fernando|Guzman|Alvarado|f.guzman@email.com|1984-02-14|5511223344|5511223344|fguzman|M|Fer_G1234|GUAF840214HDFRRN11|1|Vallarta|101|99|1153
+Gabriela|Soto|Reyes|g.soto@email.com|1994-10-31|5522334455|5522334455|gsoto|F|Gaby_S777!|SORG941031MDFRRN12|3|Patria|20|10|1154
+Manuel|Ortega|Jimenez|m.ortega@email.com|1982-12-12|5533445566|5533445566|mortega|M|Manu_7777*|ORJM821212HDFRRN13|2|Americas|SN|400|1155
+Patricia|Luna|Pena|p.luna@email.com|1989-05-05|5544556677|5544556677|pluna|F|1322413223_Pat|LUPP890505MDFRRN14|1|Mexico|8|15|1156
+Daniel|Rios|Suarez|d.rios@email.com|1986-07-07|5555667788|5555667788|drios|M|Dan_9999$|RISD860707HDFRRN15|2|Pino Suarez|44|2|1157
+Rosa|Ibarra|Velazquez|r.ibarra@email.com|1996-03-03|5566778899|5566778899|ribarra|F|Rosa_i123%|IAVR960303MDFRRN16|3|Lazaro Cardenas|5|88|1158
+Alberto|Molina|Castro|a.molina@email.com|1983-04-04|5577889900|5577889900|amolina|M|Albert_M12&|MOCA830404HDFRRN17|1|Nino Obrero|12|4|1159
+Monica|Chavez|Bravo|m.chavez@email.com|1990-01-01|5588990011|5588990011|mchavez|F|Moni_C1234|CHBM900101MDFRRN18|2|Guadalupe|1|77|1160
+Francisco|Leon|Lara|f.leon@email.com|1981-11-11|5599001122|5599001122|fleon|M|Fran_L1111!|LELF811111HDFRRN19|1|Mariano Otero|10|101|1161
+Beatriz|Herrera|Pardo|b.herrera@email.com|1997-09-09|5510101010|5510101010|bherrera|F|Bea_H7777.|HEPB970909MDFRRN20|3|Lopez Mateos|2|300|1162
+Raul|Aguirre|Salas|r.aguirre@email.com|1984-06-06|5520202020|5520202020|raguirre|M|Raul_A1234|AGSR840606HDFRRN21|2|Rio Nilo|55|9|1163
