@@ -1,5 +1,6 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.JPA;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,12 @@ public class Estado {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idpais")
     private Pais pais;
 
     @OneToMany(mappedBy = "estado", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Municipio> municipios = new ArrayList<>();
 
     public Estado() {

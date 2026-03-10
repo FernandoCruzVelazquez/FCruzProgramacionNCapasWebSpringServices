@@ -1,5 +1,6 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.JPA;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class Municipio {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idestado")
     private Estado estado;
 

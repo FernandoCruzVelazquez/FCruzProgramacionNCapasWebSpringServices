@@ -1,5 +1,6 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.JPA;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,11 +21,12 @@ public class Direccion {
     @Column(name = "numeroexterior")
     private String numeroExterior;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idusuario")
+    @JsonBackReference
     private Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idcolonia")
     private Colonia colonia;
 

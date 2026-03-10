@@ -1,5 +1,6 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.JPA;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Rol {
     private String nombreRol;
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Usuario> usuarios = new ArrayList<>();
 
     public Rol() {

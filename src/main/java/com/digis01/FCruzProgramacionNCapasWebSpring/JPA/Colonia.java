@@ -1,5 +1,6 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.JPA;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +18,7 @@ public class Colonia {
     @Column(name = "codigopostal")
     private String codigoPostal;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idmunicipio") 
     private Municipio municipio;
 

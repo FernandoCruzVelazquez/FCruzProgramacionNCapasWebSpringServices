@@ -1,6 +1,8 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.JPA;
 
-import com.digis01.FCruzProgramacionNCapasWebSpring.ML.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,7 @@ import jakarta.validation.Valid;
 
 @Entity
 @Table(name = "usuario")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Usuario {
 
     @Id
@@ -73,11 +76,12 @@ public class Usuario {
     @Column(name = "status")
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idrol")
     private Rol rol;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Direccion> direccion = new ArrayList<>();
 
     public Usuario() {}

@@ -273,6 +273,11 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
 
         return result;
     }
+
+    @Override
+    public Result UpdateStatus(int idUsuario, int status) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     
     
