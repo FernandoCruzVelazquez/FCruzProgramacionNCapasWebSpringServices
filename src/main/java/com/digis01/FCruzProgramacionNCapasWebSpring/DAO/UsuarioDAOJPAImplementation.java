@@ -4,6 +4,7 @@ package com.digis01.FCruzProgramacionNCapasWebSpring.DAO;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Result;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Direccion;
+import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.ArrayList;
@@ -59,17 +60,17 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
 
         try {
 
-            com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario usuarioJPA = modelMapper.map(usuarioML, com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario.class);
+            Usuario usuarioJPA = modelMapper.map(usuarioML, Usuario.class);
 
             if (usuarioML.getRol() != null && usuarioML.getRol().getIdRol() > 0) {
 
-                com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol rolJPA = entityManager.find(com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol.class,usuarioML.getRol().getIdRol() );
+                Rol rolJPA = entityManager.find(Rol.class,usuarioML.getRol().getIdRol() );
 
                 usuarioJPA.setRol(rolJPA);
             }
 
             if (usuarioJPA.getDireccion() != null) {
-                for (com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Direccion direccion : usuarioJPA.getDireccion()) {
+                for (Direccion direccion : usuarioJPA.getDireccion()) {
 
                     direccion.setUsuario(usuarioJPA); 
                 }
@@ -94,7 +95,7 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
         Result result = new Result();
         try {
             
-            TypedQuery<com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario> query = entityManager.createQuery(
+            TypedQuery<Usuario> query = entityManager.createQuery(
                 "SELECT usuario FROM Usuario usuario " +
                 "LEFT JOIN FETCH usuario.rol rol " +
                 "LEFT JOIN FETCH usuario.direccion direccion " +
@@ -104,8 +105,7 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
                 "LEFT JOIN FETCH estado.pais " +
                 "WHERE usuario.idUsuario = :id",
                 Usuario.class);
-            query.setParameter("id", idUsuario);
-            com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario usuarioJPA = query.getSingleResult();
+            query.setParameter("id", idUsuario);Usuario usuarioJPA = query.getSingleResult();
 
             Usuario usuarioML =  modelMapper.map(usuarioJPA, Usuario.class);
 
@@ -126,20 +126,38 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
     }
     
     @Override
-    @Transactional 
+    @Transactional
     public Result Update(Usuario usuarioML) {
+
         Result result = new Result();
+
         try {
-            
-            com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario usuarioJPA = modelMapper.map(usuarioML, Usuario.class);
+
+            Usuario usuarioJPA = entityManager.find(Usuario.class, usuarioML.getIdUsuario());
+
+            usuarioJPA.setUserName(usuarioML.getUserName());
+            usuarioJPA.setNombre(usuarioML.getNombre());
+            usuarioJPA.setApellidoPaterno(usuarioML.getApellidoPaterno());
+            usuarioJPA.setApellidosMaterno(usuarioML.getApellidosMaterno());
+            usuarioJPA.setEmail(usuarioML.getEmail());
+            usuarioJPA.setTelefono(usuarioML.getTelefono());
+            usuarioJPA.setCelular(usuarioML.getCelular());
+            usuarioJPA.setSexo(usuarioML.getSexo());
+            usuarioJPA.setCURP(usuarioML.getCURP());
+
+            Rol rol = entityManager.find(Rol.class, usuarioML.getRol().getIdRol());
+            usuarioJPA.setRol(rol);
 
             entityManager.merge(usuarioJPA);
 
             result.correct = true;
+
         } catch (Exception ex) {
+
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
         }
+
         return result;
     }
     
@@ -198,8 +216,8 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
                 jpql += "AND r.idRol = :idRol ";
             }
 
-            TypedQuery<com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario> query =
-                    entityManager.createQuery(jpql, com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario.class);
+            TypedQuery<Usuario> query =
+                    entityManager.createQuery(jpql, Usuario.class);
 
             if (usuarioBusqueda.getNombre() != null && !usuarioBusqueda.getNombre().trim().isEmpty()) {
                 query.setParameter("nombre", "%" + usuarioBusqueda.getNombre().trim() + "%");
@@ -220,11 +238,11 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
                 query.setParameter("idRol", usuarioBusqueda.getRol().getIdRol());
             }
 
-            List<com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario> usuariosJPA = query.getResultList();
+            List<Usuario> usuariosJPA = query.getResultList();
 
             result.objects = new ArrayList<>();
 
-            for (com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario usuarioJPA : usuariosJPA) {
+            for (Usuario usuarioJPA : usuariosJPA) {
 
                 Usuario usuarioML =  modelMapper.map(usuarioJPA,Usuario.class);
 
@@ -250,11 +268,7 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
 
         try {
 
-            com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario usuarioJPA =
-                    entityManager.find(
-                        com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario.class,
-                        idUsuario
-                    );
+            Usuario usuarioJPA = entityManager.find(Usuario.class, idUsuario);
 
             if (usuarioJPA != null) {
                 entityManager.remove(usuarioJPA);

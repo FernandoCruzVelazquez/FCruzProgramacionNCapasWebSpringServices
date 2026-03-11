@@ -10,4 +10,12 @@ public class Result {
     public Object object; 
     public List<Object> objects;
     
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
+    
 }
