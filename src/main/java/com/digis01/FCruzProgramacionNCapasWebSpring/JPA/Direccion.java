@@ -1,6 +1,7 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.JPA;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,7 +24,7 @@ public class Direccion {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idusuario")
-    @JsonBackReference
+    @JsonIgnoreProperties("direcciones")
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -48,7 +49,8 @@ public class Direccion {
     public void setCalle(String calle) {
         this.calle = calle;
     }
-
+    
+    @JsonProperty("NumeroIInteriori")
     public String getNumeroIInteriori() {
         return NumeroIInteriori;
     }

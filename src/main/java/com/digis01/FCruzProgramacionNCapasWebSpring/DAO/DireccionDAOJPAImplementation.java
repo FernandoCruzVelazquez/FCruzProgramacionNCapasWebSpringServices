@@ -1,7 +1,9 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.DAO;
 
+import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Colonia;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Result;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Direccion;
+import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -17,6 +19,8 @@ public class DireccionDAOJPAImplementation implements IDireccionJPA {
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    
 
     @Override
     @Transactional
@@ -83,7 +87,6 @@ public class DireccionDAOJPAImplementation implements IDireccionJPA {
 
             if (direccionJPA != null) {
 
-                // Romper relación bidireccional si existe
                 if (direccionJPA.getUsuario() != null) {
                     direccionJPA.getUsuario().getDireccion().remove(direccionJPA);
                     direccionJPA.setUsuario(null);
@@ -106,6 +109,27 @@ public class DireccionDAOJPAImplementation implements IDireccionJPA {
             result.ex = ex;
         }
 
+        return result;
+    }
+    
+    @Override
+    @Transactional
+    public Result Add(Direccion direccion) {
+        Result result = new Result();
+        try {
+            Usuario usuario = entityManager.find(Usuario.class, direccion.getUsuario().getIdUsuario());
+            direccion.setUsuario(usuario);
+
+            Colonia colonia = entityManager.find(Colonia.class, direccion.getColonia().getIdColonia());
+            direccion.setColonia(colonia);
+
+            entityManager.persist(direccion);
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getMessage();
+            System.out.println("Error en DAO: " + ex.getMessage());
+        }
         return result;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -122,33 +123,47 @@ public class UserRestController {
         return usuarioDAOJPAImplementation.Update(usuario);
     }
     
-    @PostMapping("/Usuario/Foto/{id}")
-    public Result actualizarFoto(@PathVariable int id,@RequestParam("imagen") MultipartFile foto){
-
-        try{
+    @PostMapping("/Foto/{id}")
+    public Result actualizarFoto(@PathVariable int id, @RequestParam("imagen") MultipartFile foto) {
+        Result result = new Result();
+        try {
+            if (foto.isEmpty()) {
+                result.correct = false;
+                result.errorMessage = "El archivo está vacío";
+                return result;
+            }
 
             String tipo = foto.getContentType();
-
-            if("image/jpeg".equals(tipo) || "image/png".equals(tipo)){
+            if ("image/jpeg".equals(tipo) || "image/png".equals(tipo)) {
 
                 byte[] bytes = foto.getBytes();
                 String base64 = Base64.getEncoder().encodeToString(bytes);
+
                 String imagenFinal = "data:" + tipo + ";base64," + base64;
 
                 return usuarioDAOJPAImplementation.UpdateFoto(id, imagenFinal);
+            } else {
+                result.correct = false;
+                result.errorMessage = "Formato no permitido. Solo JPG y PNG.";
             }
 
-        }catch(Exception e){
-            Result result = new Result();
+        } catch (Exception e) {
             result.correct = false;
-            return result;
+            result.errorMessage = "Error al procesar la imagen: " + e.getMessage();
+            result.ex = e;
         }
-
-        Result result = new Result();
-        result.correct = false;
         return result;
     }
     
+    @DeleteMapping("/{idUsuario}")
+    public Result Eliminar(@PathVariable int idUsuario) {
+        return usuarioDAOJPAImplementation.Delete(idUsuario);
+    }
+    
+    @PutMapping("/UpdateStatus/{idUsuario}/{status}")
+    public Result updateStatus(@PathVariable int idUsuario, @PathVariable int status) {
+        return usuarioDAOJPAImplementation.UpdateStatus(idUsuario, status);
+    }
     
     
 }

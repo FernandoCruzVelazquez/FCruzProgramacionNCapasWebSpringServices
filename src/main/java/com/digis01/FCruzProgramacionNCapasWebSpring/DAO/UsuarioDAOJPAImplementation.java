@@ -162,24 +162,26 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
     }
     
     @Override
+    @Transactional
     public Result UpdateFoto(int idUsuario, String foto) {
-
         Result result = new Result();
-
         try {
-            
-            
-            
-            result.correct = true;
+            Usuario usuarioJPA = entityManager.find(Usuario.class, idUsuario);
 
+            if (usuarioJPA != null) {
+                usuarioJPA.setFoto(foto);
+                result.correct = true;
+            } else {
+                result.correct = false;
+                result.errorMessage = "Usuario no encontrado";
+            }
         } catch (Exception ex) {
             result.correct = false;
             result.errorMessage = ex.getMessage();
-            result.ex = ex;
         }
-
         return result;
     }
+    
     
     @Override
     public Result GetByFilter(Usuario usuarioBusqueda) {
@@ -289,8 +291,23 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
     }
 
     @Override
+    @Transactional
     public Result UpdateStatus(int idUsuario, int status) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Result result = new Result();
+        try {
+            Usuario usuarioJPA = entityManager.find(Usuario.class, idUsuario);
+            if (usuarioJPA != null) {
+                usuarioJPA.setStatus(status); // Actualizamos a 1 o 0
+                result.correct = true;
+            } else {
+                result.correct = false;
+                result.errorMessage = "No se encontró el usuario para actualizar el status.";
+            }
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getMessage();
+        }
+        return result;
     }
     
     

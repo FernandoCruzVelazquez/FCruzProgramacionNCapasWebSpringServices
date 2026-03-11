@@ -81,7 +81,7 @@ public class Usuario {
     private Rol rol;
 
     @OneToMany(mappedBy = "usuario",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnoreProperties("usuario")
     private List<Direccion> direccion = new ArrayList<>();
 
     public Usuario() {}
