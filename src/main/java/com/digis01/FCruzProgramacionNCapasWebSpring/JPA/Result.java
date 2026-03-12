@@ -10,6 +10,10 @@ public class Result {
     public Object object; 
     public List<Object> objects;
     
+    public int correctos;
+    public int incorrectos;
+    
+    
     public boolean isCorrect() {
         return correct;
     }
@@ -17,5 +21,6 @@ public class Result {
     public void setCorrect(boolean correct) {
         this.correct = correct;
     }
+    
     
 }

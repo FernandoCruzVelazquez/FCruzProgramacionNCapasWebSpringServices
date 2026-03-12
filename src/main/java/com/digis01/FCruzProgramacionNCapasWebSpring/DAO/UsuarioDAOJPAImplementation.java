@@ -91,6 +91,45 @@ public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
     }
     
     @Override
+    @Transactional
+    public Result AddCM(Usuario usuarioML) {
+
+        Result result = new Result();
+
+        try {
+
+            Usuario usuarioJPA = modelMapper.map(usuarioML, Usuario.class);
+
+            usuarioJPA.setStatus(1);
+
+            if (usuarioML.getRol() != null && usuarioML.getRol().getIdRol() > 0) {
+
+                Rol rolJPA = entityManager.find(Rol.class, usuarioML.getRol().getIdRol());
+
+                usuarioJPA.setRol(rolJPA);
+            }
+
+            if (usuarioJPA.getDireccion() != null) {
+                for (Direccion direccion : usuarioJPA.getDireccion()) {
+
+                    direccion.setUsuario(usuarioJPA);
+                }
+            }
+
+            entityManager.persist(usuarioJPA);
+
+            result.correct = true;
+
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
+        return result;
+    }
+    
+    @Override
     public Result GetById(int idUsuario) {
         Result result = new Result();
         try {

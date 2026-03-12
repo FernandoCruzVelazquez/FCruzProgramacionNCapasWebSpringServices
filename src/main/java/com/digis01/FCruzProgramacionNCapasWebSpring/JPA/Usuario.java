@@ -22,6 +22,11 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -33,39 +38,51 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
     private int idUsuario;
-
+    
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$",message = "Solo acepto letras")
+    @NotNull(message = "No puedo ser nulo")
+    @NotEmpty(message = "No puedo ser vacio")
+    @Size(min = 3, max = 50, message = "más de 2 letras min")
     @Column(name = "nombre")
     private String nombre;
-
+    
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$",message = "Solo acepto letras")
     @Column(name = "apellidopaterno")
     private String apellidoPaterno;
-
+    
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$",message = "Solo acepto letras")
     @Column(name = "apellidosmaterno")
     private String apellidosMaterno;
-
+    
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",message = "No se reconoce como un correo electronico")
     @Column(name = "email")
     private String email;
-
-    @Temporal(TemporalType.DATE)
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "La fecha no puede ser nula")
+    @Past(message = "Es una fecha futura")
     @Column(name = "fechanacimiento")
     private Date fechaNacimiento;
-
+    
+    @Pattern(regexp = "^[0-9]{10}$",message = "Solo números y no mas de 10 digitos")
     @Column(name = "telefono")
     private String telefono;
-
+    
+    @Pattern(regexp = "^[0-9]{10}$",message = "Solo números y no mas de 10 digitos")
     @Column(name = "celular")
     private String celular;
-
+    
     @Column(name = "username")
     private String userName;
-
+    
     @Column(name = "sexo", length = 2)
     private String sexo;
-
+    
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&._-])[A-Za-z\\d@$!%*?&._-]{8,16}$",message = "No se acpeta como contraseña: solo 16 carcateres")
     @Column(name = "password")
     private String password;
-
+    
+    @Pattern(regexp = "^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9A-Z]{2}$",message = "CURP Invalido")
     @Column(name = "curp")
     private String curp;
 
@@ -86,7 +103,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(int idUsuario, String nombre, String apellidoPaterno, String apellidosMaterno, String email, Date fechaNacimiento, String telefono, String celular, String userName, String sexo, String password, String CURP, String foto, int status, com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol rol) {
+    public Usuario(int idUsuario, String nombre, String apellidoPaterno, String apellidosMaterno, String email, Date fechaNacimiento, String telefono, String celular, String userName, String sexo, String password, String CURP, String foto, Integer status, com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol rol) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;

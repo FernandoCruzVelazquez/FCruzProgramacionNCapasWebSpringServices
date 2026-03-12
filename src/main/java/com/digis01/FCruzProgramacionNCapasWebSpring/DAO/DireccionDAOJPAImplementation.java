@@ -115,8 +115,11 @@ public class DireccionDAOJPAImplementation implements IDireccionJPA {
     @Override
     @Transactional
     public Result Add(Direccion direccion) {
+
         Result result = new Result();
+
         try {
+
             Usuario usuario = entityManager.find(Usuario.class, direccion.getUsuario().getIdUsuario());
             direccion.setUsuario(usuario);
 
@@ -124,12 +127,15 @@ public class DireccionDAOJPAImplementation implements IDireccionJPA {
             direccion.setColonia(colonia);
 
             entityManager.persist(direccion);
+
             result.correct = true;
+
         } catch (Exception ex) {
+
             result.correct = false;
             result.errorMessage = ex.getMessage();
-            System.out.println("Error en DAO: " + ex.getMessage());
         }
+
         return result;
     }
 }

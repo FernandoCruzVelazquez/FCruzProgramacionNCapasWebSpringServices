@@ -1,5 +1,6 @@
 package com.digis01.FCruzProgramacionNCapasWebSpring.RestController;
 
+import com.digis01.FCruzProgramacionNCapasWebSpring.DAO.UsuarioDAOJPAImplementation;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Colonia;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Direccion;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Result;
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +32,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +47,8 @@ public class CMRestController {
     
     @Autowired
     private Validator validator;
+    @Autowired
+    private UsuarioDAOJPAImplementation usuarioDAOJPAImplementation;
     
     @PostMapping("/validar")
     public Result validarYRegistrar(@RequestParam("archivo") MultipartFile archivo) {
@@ -64,7 +71,7 @@ public class CMRestController {
             boolean esValido = listaErrores.isEmpty();
             String status = esValido ? "VALIDO" : "INVALIDO";
             
-            String key = esValido ? SecurityHelper.encriptarAES(destino.getAbsolutePath()) : "N/A";
+            String key = esValido ? SecurityHelper.encriptarAES(destino.getAbsolutePath()) : "-";
 
             registrarEnLog(key, destino.getAbsolutePath(), status);
 
@@ -205,25 +212,66 @@ public class CMRestController {
     }
 
     public List<ErroresArchivo> validarDatos(List<Usuario> usuarios) {
-    List<ErroresArchivo> errores = new ArrayList<>();
-    int numeroLinea = 1;
-    for (Usuario usuario : usuarios) {
-        // Ejecuta la validación de Bean Validation (Hibernate Validator)
-        Set<ConstraintViolation<Usuario>> violaciones = validator.validate(usuario);
-        
-        for (ConstraintViolation<Usuario> violacion : violaciones) {
-            ErroresArchivo error = new ErroresArchivo();
-            error.setFila(numeroLinea);
-            // Convierte el nombre del campo fallido a String
-            error.setDato(violacion.getPropertyPath().toString());
-            // Obtiene el mensaje de error configurado en la entidad
-            error.setDescripcion(violacion.getMessage());
-            errores.add(error);
+        List<ErroresArchivo> errores = new ArrayList<>();
+        int numeroLinea = 2; 
+
+        for (Usuario usuario : usuarios) {
+            Set<ConstraintViolation<Usuario>> violaciones = validator.validate(usuario);
+
+            for (ConstraintViolation<Usuario> violacion : violaciones) {
+                ErroresArchivo error = new ErroresArchivo();
+                error.setFila(numeroLinea);
+                error.setDato(violacion.getPropertyPath().toString());
+                error.setDescripcion(violacion.getMessage());
+                errores.add(error);
+            }
+            numeroLinea++;
         }
-        numeroLinea++;
+        return errores;
     }
-    return errores;
-}
+    
+    @GetMapping("/procesar/{key}")
+    public Result procesarArchivo(@PathVariable String key) {
+
+        key = URLDecoder.decode(key, StandardCharsets.UTF_8);
+
+        Result result = new Result();
+
+        int correctos = 0;
+        int incorrectos = 0;
+
+        try {
+
+            String rutaArchivo = SecurityHelper.desencriptarAES(key);
+
+            File file = new File(rutaArchivo);
+
+            List<Usuario> usuarios = procesarLectura(file);
+
+            for (Usuario usuario : usuarios) {
+
+                Result r = usuarioDAOJPAImplementation.AddCM(usuario);
+
+                if (r.correct) {
+                    correctos++;
+                } else {
+                    incorrectos++;
+                }
+            }
+
+            result.correct = true;
+            result.correctos = correctos;
+            result.incorrectos = incorrectos;
+
+        } catch (Exception e) {
+
+            result.correct = false;
+            result.errorMessage = e.getMessage();
+
+        }
+
+        return result;
+    }
     
 
 

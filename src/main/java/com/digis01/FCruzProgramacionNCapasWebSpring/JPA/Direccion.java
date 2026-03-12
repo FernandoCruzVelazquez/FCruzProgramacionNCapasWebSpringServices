@@ -15,8 +15,9 @@ public class Direccion {
 
     @Column(name = "calle")
     private String calle;
-
+    
     @Column(name = "numeroiinteriori")
+    @JsonProperty("NumeroIInteriori") 
     private String NumeroIInteriori;
 
     @Column(name = "numeroexterior")

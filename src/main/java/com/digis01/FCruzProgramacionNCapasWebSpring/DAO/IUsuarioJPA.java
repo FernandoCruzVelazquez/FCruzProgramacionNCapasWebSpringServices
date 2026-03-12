@@ -7,6 +7,8 @@ public interface IUsuarioJPA {
 
     Result GetAll();
     Result Add(Usuario usuario);
+    
+    Result AddCM(Usuario usuarioML);
     Result GetById(int idUsuario);
     Result Update(Usuario usuario);
     Result UpdateFoto(int idUsuario, String foto);
