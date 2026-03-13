@@ -32,28 +32,32 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("Api/Usuario")
-@Tag(name = "Usuario", description = "Servicios para la gestión de usuarios")
-public class UserRestController {
+@Tag(name = "Usuario",description = "API REST para la gestión de usuarios del sistema. Permite registrar, consultar, actualizar, eliminar y administrar el estado y fotografía de los usuarios."
+)public class UserRestController {
     
     @Autowired
     private UsuarioDAOJPAImplementation usuarioDAOJPAImplementation;
     
     @Operation(
-        summary = "Listar todos los usuarios",
-        description = "Recupera una lista completa de usuarios desde la base de datos persistida mediante JPA."
+        summary = "Obtener todos los usuarios",
+        description = "Devuelve una lista completa de los usuarios registrados en el sistema junto con su información básica."
     )
     @ApiResponses(value = {
         @ApiResponse(
-            responseCode = "200", 
-            description = "Operación exitosa. Se devuelve la lista de usuarios.",
-            content = @Content(mediaType = "application/json", 
-            array = @ArraySchema(schema = @Schema(implementation = Usuario.class)))
+            responseCode = "200",
+            description = "Lista de usuarios obtenida correctamente",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = Usuario.class))
+            )
         ),
         @ApiResponse(
-            responseCode = "500", 
-            description = "Error interno al procesar la solicitud en la base de datos.",
-            content = @Content(mediaType = "text/plain", 
-            schema = @Schema(example = "Error al conectar con la base de datos"))
+            responseCode = "500",
+            description = "Error interno al obtener los usuarios",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(example = "{\"error\":\"Error al consultar la base de datos\"}")
+            )
         )
     })
     @GetMapping 

@@ -9,6 +9,9 @@ import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario;
 import com.digis01.FCruzProgramacionNCapasWebSpring.Util.SecurityHelper;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.ErroresArchivo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,15 +60,47 @@ public class CMRestController {
     
     @Operation(
         summary = "Validar archivo de carga masiva",
-        description = "Recibe un archivo TXT o Excel con usuarios, valida su estructura y datos, y devuelve una llave (key) para procesarlo posteriormente si no existen errores"
+        description = """
+        Recibe un archivo TXT o Excel con registros de usuarios.
+        El sistema valida la estructura del archivo y los datos de cada registro.
+
+        Si el archivo no contiene errores se genera una KEY que permitirá procesarlo posteriormente.
+        
+        Formatos soportados:
+        - TXT separado por |
+        - Excel (.xlsx)
+        """
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Archivo validado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Archivo inválido"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+        @ApiResponse(
+            responseCode = "200",
+            description = "Archivo validado correctamente. Se devuelve la llave (key) para procesarlo",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = """
+                {
+                 "correct": true,
+                 "object": "ENCRYPTED_KEY_GENERADA"
+                }
+                """)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Archivo inválido o estructura incorrecta"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor"
+        )
     })
     @PostMapping("/validar")
-    public Result validarYRegistrar(@RequestParam("archivo") MultipartFile archivo) {
+    public Result validarYRegistrar(
+            @Parameter(
+                description = "Archivo de usuarios en formato TXT o Excel",
+                required = true
+            )
+            @RequestParam("archivo") MultipartFile archivo) {
         Result result = new Result();
         List<ErroresArchivo> listaErrores = new ArrayList<>();
         
@@ -246,15 +281,48 @@ public class CMRestController {
     
     @Operation(
         summary = "Procesar archivo validado",
-        description = "Recibe la llave generada en la validación del archivo y registra los usuarios en la base de datos"
+        description = """
+        Procesa el archivo previamente validado utilizando la KEY generada.
+
+        La KEY contiene la ruta del archivo cifrada mediante AES.
+        El sistema registra cada usuario en la base de datos.
+
+        Al finalizar se devuelve:
+        - número de registros correctos
+        - número de registros incorrectos
+        """
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Archivo procesado correctamente"),
-        @ApiResponse(responseCode = "404", description = "Archivo no encontrado"),
-        @ApiResponse(responseCode = "500", description = "Error al procesar el archivo")
+        @ApiResponse(
+            responseCode = "200",
+            description = "Archivo procesado correctamente",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(value = """
+                {
+                 "correct": true,
+                 "correctos": 45,
+                 "incorrectos": 3
+                }
+                """)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Archivo no encontrado o key inválida"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Error al procesar el archivo"
+        )
     })
     @GetMapping("/procesar/{key}")
-    public Result procesarArchivo(@PathVariable String key) {
+    public Result procesarArchivo(
+            @Parameter(
+                description = "Key generada al validar el archivo",
+                example = "ENCRYPTED_KEY_GENERADA"
+            )
+            @PathVariable String key) {
 
         key = URLDecoder.decode(key, StandardCharsets.UTF_8);
 
