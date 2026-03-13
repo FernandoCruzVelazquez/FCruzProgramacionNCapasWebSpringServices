@@ -8,6 +8,10 @@ import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario;
 import com.digis01.FCruzProgramacionNCapasWebSpring.Util.SecurityHelper;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.ErroresArchivo;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import java.io.BufferedReader;
@@ -43,6 +47,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("ApiCM")
+@Tag(name = "Carga Masiva", description = "Servicios para la carga masiva de usuarios mediante archivos TXT o Excel")
 public class CMRestController {
     
     @Autowired
@@ -50,6 +55,15 @@ public class CMRestController {
     @Autowired
     private UsuarioDAOJPAImplementation usuarioDAOJPAImplementation;
     
+    @Operation(
+        summary = "Validar archivo de carga masiva",
+        description = "Recibe un archivo TXT o Excel con usuarios, valida su estructura y datos, y devuelve una llave (key) para procesarlo posteriormente si no existen errores"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Archivo validado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Archivo inválido"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     @PostMapping("/validar")
     public Result validarYRegistrar(@RequestParam("archivo") MultipartFile archivo) {
         Result result = new Result();
@@ -230,6 +244,15 @@ public class CMRestController {
         return errores;
     }
     
+    @Operation(
+        summary = "Procesar archivo validado",
+        description = "Recibe la llave generada en la validación del archivo y registra los usuarios en la base de datos"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Archivo procesado correctamente"),
+        @ApiResponse(responseCode = "404", description = "Archivo no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error al procesar el archivo")
+    })
     @GetMapping("/procesar/{key}")
     public Result procesarArchivo(@PathVariable String key) {
 
@@ -250,9 +273,9 @@ public class CMRestController {
 
             for (Usuario usuario : usuarios) {
 
-                Result r = usuarioDAOJPAImplementation.AddCM(usuario);
+                Result resultSet = usuarioDAOJPAImplementation.AddCM(usuario);
 
-                if (r.correct) {
+                if (resultSet.correct) {
                     correctos++;
                 } else {
                     incorrectos++;
