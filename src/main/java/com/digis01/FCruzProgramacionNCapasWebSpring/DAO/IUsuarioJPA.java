@@ -16,4 +16,5 @@ public interface IUsuarioJPA {
     Result Delete(int idUsuario);
     Result UpdateStatus(int idUsuario, int status);
     
+    Result GetByUsername(String Username);
 }
