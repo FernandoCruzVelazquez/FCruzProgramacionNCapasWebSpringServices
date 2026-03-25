@@ -1,4 +1,4 @@
-package com.digis01.FCruzProgramacionNCapasWebSpring.Util;
+package com.digis01.FCruzProgramacionNCapasWebSpring.Security;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

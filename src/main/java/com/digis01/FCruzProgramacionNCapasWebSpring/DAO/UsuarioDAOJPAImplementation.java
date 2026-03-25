@@ -6,6 +6,7 @@ import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Direccion;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class UsuarioDAOJPAImplementation implements IUsuarioJPA {
 
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager; 
     @Autowired
     private ModelMapper modelMapper;

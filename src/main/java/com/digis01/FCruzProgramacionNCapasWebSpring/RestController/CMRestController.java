@@ -6,7 +6,7 @@ import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Direccion;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Result;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Rol;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario;
-import com.digis01.FCruzProgramacionNCapasWebSpring.Util.SecurityHelper;
+import com.digis01.FCruzProgramacionNCapasWebSpring.Security.SecurityHelper;
 import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.ErroresArchivo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

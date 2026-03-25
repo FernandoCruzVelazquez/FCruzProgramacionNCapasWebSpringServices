@@ -1,8 +1,9 @@
-package com.digis01.FCruzProgramacionNCapasWebSpring.Service;
+package com.digis01.FCruzProgramacionNCapasWebSpring.Security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
