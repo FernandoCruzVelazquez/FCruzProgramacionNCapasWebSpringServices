@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.security.Principal;
 import java.util.Base64;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ import org.springframework.web.multipart.MultipartFile;
         )
     })
     @GetMapping
-    @PreAuthorize("hasRole('Administrador')")
+    @PreAuthorize("hasAuthority('Administrador')")
     public ResponseEntity<Object> obtenerUsuarios() {
         Result result = usuarioDAOJPAImplementation.GetAll();
 
@@ -70,6 +71,30 @@ import org.springframework.web.multipart.MultipartFile;
             return ResponseEntity.ok(result.objects);
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.errorMessage);
+        }
+    }
+    
+    @RestController
+    @RequestMapping("/Usuario")
+    public class UsuarioController {
+
+        @Autowired
+        private UsuarioDAOJPAImplementation usuarioDAOJPAImplementation;
+
+        @GetMapping("/perfil")
+        public ResponseEntity<Usuario> perfil(Principal principal) {
+
+            String username = principal.getName(); 
+
+            Result result = usuarioDAOJPAImplementation.GetByUsername(username);
+
+            if (result.object == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Usuario usuario = (Usuario) result.object;
+
+            return ResponseEntity.ok(usuario);
         }
     }
     

@@ -5,6 +5,7 @@ import com.digis01.FCruzProgramacionNCapasWebSpring.JPA.Usuario;
 
 
 import com.digis01.FCruzProgramacionNCapasWebSpring.DAO.UsuarioDAOJPAImplementation;
+import com.digis01.FCruzProgramacionNCapasWebSpring.Security.CustomUserDetails;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,11 +32,7 @@ public class UserDetail implements UserDetailsService{
 
         Usuario usuario = (Usuario) result.object;
 
-        return User.withUsername(usuario.getUserName()) 
-                .password(usuario.getPassword())
-                .roles(usuario.getRol().getNombreRol())
-                .disabled(usuario.getStatus() == 0)
-                .build();
+        return new CustomUserDetails(usuario);
     }
     
 }
