@@ -12,13 +12,26 @@ public class JwtService {
     private final String SECRET_KEY = "clave_super_secreta_muy_larga_123456789";
 
     public String generateToken(UserDetails userDetails) {
+
+        CustomUserDetails user = (CustomUserDetails) userDetails;
+
         return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .claim("roles", userDetails.getAuthorities())
+                .subject(user.getUsername())
+                .claim("nombre", user.getNombreCompleto())
+                .claim("rol", user.getRol())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                 .compact();
+    }
+    
+    public String extractClaim(String token, String claim) {
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get(claim, String.class);
     }
     
     

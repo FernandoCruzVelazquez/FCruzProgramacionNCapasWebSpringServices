@@ -63,7 +63,7 @@ import org.springframework.web.multipart.MultipartFile;
         )
     })
     @GetMapping
-    @PreAuthorize("hasAuthority('Administrador')")
+    @PreAuthorize("hasRole('Administrador')")
     public ResponseEntity<Object> obtenerUsuarios() {
         Result result = usuarioDAOJPAImplementation.GetAll();
 
@@ -74,29 +74,6 @@ import org.springframework.web.multipart.MultipartFile;
         }
     }
     
-    @RestController
-    @RequestMapping("/Usuario")
-    public class UsuarioController {
-
-        @Autowired
-        private UsuarioDAOJPAImplementation usuarioDAOJPAImplementation;
-
-        @GetMapping("/perfil")
-        public ResponseEntity<Usuario> perfil(Principal principal) {
-
-            String username = principal.getName(); 
-
-            Result result = usuarioDAOJPAImplementation.GetByUsername(username);
-
-            if (result.object == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            Usuario usuario = (Usuario) result.object;
-
-            return ResponseEntity.ok(usuario);
-        }
-    }
     
     @Operation(
         summary = "Registrar un nuevo usuario",
@@ -235,6 +212,7 @@ import org.springframework.web.multipart.MultipartFile;
         )
     })
     @GetMapping("/Detalle/{id}")
+    @PreAuthorize("hasRole('Administrador')")
     public Result detalleUsuario(
             @Parameter(description = "Identificador único del usuario", example = "10", required = true)
             @PathVariable int id){
