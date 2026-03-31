@@ -25,6 +25,8 @@ public class CorsFilterConfig {
         corsConfiguration.addAllowedMethod(HttpMethod.PATCH);
         
         corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOriginPattern("http://localhost:8081");
         
         source.registerCorsConfiguration("/**", corsConfiguration);
         
