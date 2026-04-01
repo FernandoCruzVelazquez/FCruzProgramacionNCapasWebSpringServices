@@ -97,6 +97,7 @@ import org.springframework.web.multipart.MultipartFile;
         )
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('Administrador')")
     public ResponseEntity<Result> Add(
             @Parameter(description = "Objeto JSON con la información del usuario (Nombre, Email, etc.)", required = true)
             @RequestPart("datos") Usuario usuario,
